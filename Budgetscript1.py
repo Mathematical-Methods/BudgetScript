@@ -37,6 +37,7 @@ Food_amount = 0;
 
 for receipt in receipts:
     receipt = receipt.replace('.pdf','')
+    receipt = receipt.replace('.PDF','')
     fields = receipt.split(" ",3)
     if len(fields) == 4:
         if fields[3].split('-',1)[0] == "Income" or fields[3].split('-',1)[0] == "Return" or fields[3].split('-',1)[0] == "Payroll":
