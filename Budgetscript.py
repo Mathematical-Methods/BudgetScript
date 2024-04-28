@@ -86,6 +86,7 @@ for receipt in receipts:
 
 Total = Bill_amount[0] + Debt_amount[0] + Housing_amount[0] + Insurance_amount[0] + Investment_amount[0] + Medical_amount[0] + MISC_amount[0] + Personal_amount[0] + Saving_amount[0] + Transportation_amount[0] + Utilities_amount[0] + Food_amount[0];
 
+
 with open("report.txt", "w") as f:
     if Income_amount[0] > 0:
         print("Income", file=f)
