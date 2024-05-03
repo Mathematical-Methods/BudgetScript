@@ -82,10 +82,10 @@ for receipt in receipts:
         if fields[3].split('-',1)[0] == "Utilities":
             Utilities.append(receipt);
             Utilities_amount[0] = Utilities_amount[0] + float(fields[1].strip("$"));
-        if fields[3] == "Food" or fields[3] == "Groceries":
+        if fields[3].split('-',1)[0] == "Food" or fields[3].split('-',1)[0] == "Groceries":
             Food.append(receipt);
             Food_amount[0] = Food_amount[0] + float(fields[1].strip("$"));
-        if fields[3] == "Donation":
+        if fields[3].split('-',1)[0] == "Donation":
             Donation.append(receipt);
             Donation_amount[0] = Donation_amount[0] + float(fields[1].strip("$"));
 
