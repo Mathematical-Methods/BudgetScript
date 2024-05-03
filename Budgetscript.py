@@ -20,6 +20,7 @@ Saving = [];
 Transportation = [];
 Utilities = [];
 Food = [];
+Donation = [];
 
 #  Income/Cost Variables
 Income_amount = [0]; # Income will only be tracked into a single account (the checking account) for now. A better script would account for earnings growth of an investment account.
@@ -35,6 +36,7 @@ Saving_amount = [0,0,0,0];
 Transportation_amount = [0,0,0,0];
 Utilities_amount = [0,0,0,0];
 Food_amount = [0,0,0,0];
+Donation_amount = [0,0,0,0];
 
 # This vector contains the last four numbers of each card currently held.
 last4cardNo = [9218,1781,4972,3772]
@@ -83,9 +85,11 @@ for receipt in receipts:
         if fields[3] == "Food" or fields[3] == "Groceries":
             Food.append(receipt);
             Food_amount[0] = Food_amount[0] + float(fields[1].strip("$"));
+        if fields[3] == "Donation":
+            Donation.append(receipt);
+            Donation_amount[0] = Donation_amount[0] + float(fields[1].strip("$"));
 
-Total = Bill_amount[0] + Debt_amount[0] + Housing_amount[0] + Insurance_amount[0] + Investment_amount[0] + Medical_amount[0] + MISC_amount[0] + Personal_amount[0] + Saving_amount[0] + Transportation_amount[0] + Utilities_amount[0] + Food_amount[0];
-
+Total = Bill_amount[0] + Debt_amount[0] + Housing_amount[0] + Insurance_amount[0] + Investment_amount[0] + Medical_amount[0] + MISC_amount[0] + Personal_amount[0] + Saving_amount[0] + Transportation_amount[0] + Utilities_amount[0] + Food_amount[0] + Donation_amount[0];
 
 with open("report.txt", "w") as f:
     if Income_amount[0] > 0:
@@ -153,6 +157,11 @@ with open("report.txt", "w") as f:
         for receipt in Food:
             print("     ", receipt, file=f);
         print("    Food Cost:",Food_amount[0], file=f);
+    if Donation_amount[0] > 0:
+        print("Food", file=f)
+        for receipt in Donation:
+            print("     ", receipt, file=f);
+        print("    Food Cost:",Donation_amount[0], file=f);
 
     print('You earned $',Income_amount[0],'this month.', file=f);
     print('You spent $',Total,'this month.', file=f);
