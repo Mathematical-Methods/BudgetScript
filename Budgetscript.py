@@ -158,7 +158,7 @@ with open("report.txt", "w") as f:
             print("     ", receipt, file=f);
         print("    Food Cost:",Food_amount[0], file=f);
     if Donation_amount[0] > 0:
-        print("Food", file=f)
+        print("Donations", file=f)
         for receipt in Donation:
             print("     ", receipt, file=f);
         print("    Food Cost:",Donation_amount[0], file=f);
