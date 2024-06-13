@@ -20,7 +20,6 @@ for receipt in receipts:
     receipt = receipt.replace('.PDF','')
     fields = receipt.split(" ",3)
     if len(fields) == 4:
-        for variable in variable_list:
             if fields[3].split('-',1)[0] == "Income" or fields[3].split('-',1)[0] == "Return" or fields[3].split('-',1)[0] == "Payroll":
                 variable[0][0].append(receipt);
                 variable[1][0] = variable[1][0] + float(fields[1].strip("+$"));
