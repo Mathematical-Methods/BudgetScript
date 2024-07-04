@@ -3,8 +3,7 @@ import os # os is a library for interacting with the file system.
 workingdir = os.getcwd(); # get the working directory
 
 # file name retrieval: os.listdir returns a list of files within the spec'd directory
-receipts = os.listdir('/home/unknown/Downloads/05. May/');
-#receipts = os.listdir(workingdir);
+receipts = os.listdir(workingdir);
 
 # Create a dictionary of all variables names
 # "" is a placeholder for the names of the receipts. It is (believed) to be equiv. to Income = []. 
