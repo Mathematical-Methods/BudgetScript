@@ -1,167 +1,88 @@
-import os
+import os # os is a library for interacting with the file system.
 
-# get the working directory
-workingdir = os.getcwd();
+workingdir = os.getcwd(); # get the working directory
+
 # file name retrieval: os.listdir returns a list of files within the spec'd directory
-receipts = os.listdir(workingdir);
+receipts = os.listdir('/home/unknown/Downloads/05. May/');
+#receipts = os.listdir(workingdir);
 
-# Gain/Expense Category Arrays
-# These arrays will contain the stripped file names of each receipt that belongs in it according to expense type.
-Income = [];
-Bills = [];
-Debts = [];
-Housing = [];
-Insurance = [];
-Investment = [];
-Medical = [];
-MISC = [];
-Personal = [];
-Saving = [];
-Transportation = [];
-Utilities = [];
-Food = [];
-Donation = [];
+# Create a dictionary of all variables names
+# "" is a placeholder for the names of the receipts. It is (believed) to be equiv. to Income = []. 
+# 0 is a placeholder for the initial amount of the receipts. It is to be equiv. to Income = [].
+config = {"income"              : [["Income"],[0]],
+          "return"              : [["Income"],[0]],
+          "payroll"             : [["Income"],[0]],
+          "debt"                : [["Debt"],[0]],
+          "debts"               : [["Debt"],[0]],
+          "housing"             : [["Housing"],[0]],
+          "insurance"           : [["Insurance"],[0]],
+          "investment"          : [["Investment"],[0]],
+          "savings"             : [["Investment"],[0]],
+          "saving"              : [["Investment"],[0]],
+          "medical"             : [["Medical"],[0]],
+          "misc"                : [["Miscellaneous"],[0]],
+          "personal"            : [["Personal"],[0]],
+          "transportation"      : [["Transportation"],[0]],
+          "gas"                 : [["Transportation"],[0]],
+          "utilities"           : [["Utilities"],[0]],
+          "food"                : [["Food"],[0]],
+          "donation"            : [["Donation"],[0]],
+          };
 
-#  Income/Cost Variables
-Income_amount = [0]; # Income will only be tracked into a single account (the checking account) for now. A better script would account for earnings growth of an investment account.
-Bill_amount = [0,0,0,0]; # Each element in the vector is meant to track an individual spending account.
-Debt_amount = [0,0,0,0];
-Housing_amount = [0,0,0,0];
-Insurance_amount = [0,0,0,0];
-Investment_amount = [0,0,0,0];
-Medical_amount = [0,0,0,0];
-MISC_amount = [0,0,0,0];
-Personal_amount = [0,0,0,0];
-Saving_amount = [0,0,0,0];
-Transportation_amount = [0,0,0,0];
-Utilities_amount = [0,0,0,0];
-Food_amount = [0,0,0,0];
-Donation_amount = [0,0,0,0];
-
-# This vector contains the last four numbers of each card currently held.
-last4cardNo = [9218,1781,4972,3772]
+totalEarned = 0;
+totalspent = 0;
 
 for receipt in receipts:
-    receipt = receipt.replace('.pdf','')
-    receipt = receipt.replace('.PDF','')
-    fields = receipt.split(" ",3)
-    if len(fields) == 4:
-        if fields[3].split('-',1)[0] == "Income" or fields[3].split('-',1)[0] == "Return" or fields[3].split('-',1)[0] == "Payroll":
-            Income.append(receipt);
-            Income_amount[0] = Income_amount[0] + float(fields[1].strip("+$"));
-        if fields[3].split('-',1)[0] == "Bill":
-            Bills.append(receipt);
-            Bill_amount[0] = Bill_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Debt":
-            Debts.append(receipt);
-            Debt_amount[0] = Debt_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Housing":
-            Housing.append(receipt);
-            Housing_amount[0] = Housing_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Insurance":
-            Insurance.append(receipt);
-            Insurance_amount[0] = Insurance_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Investment":
-            Investment.append(receipt);
-            Investment_amount[0] = Investment_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Medical" or fields[3].split('-',1)[0] == "MEDICAL":
-            Medical.append(receipt);
-            Medical_amount[0] = Medical_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "MISC":
-            MISC.append(receipt);
-            MISC_amount[0] = MISC_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Personal":
-            Personal.append(receipt);
-            Personal_amount[0] = Personal_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Saving":
-            Saving.append(receipt);
-            Saving_amount[0] = Saving_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Transportation":
-            Transportation.append(receipt);
-            Transportation_amount[0] = Transportation_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Utilities":
-            Utilities.append(receipt);
-            Utilities_amount[0] = Utilities_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Food" or fields[3].split('-',1)[0] == "Groceries":
-            Food.append(receipt);
-            Food_amount[0] = Food_amount[0] + float(fields[1].strip("$"));
-        if fields[3].split('-',1)[0] == "Donation":
-            Donation.append(receipt);
-            Donation_amount[0] = Donation_amount[0] + float(fields[1].strip("$"));
+    # print("Lowercasing receipt name, removing the '.pdf' characters.");
+    receipt = receipt.lower().replace('.pdf',''); # Lowercasing receipt name, removing the '.pdf' characters.
 
-Total = Bill_amount[0] + Debt_amount[0] + Housing_amount[0] + Insurance_amount[0] + Investment_amount[0] + Medical_amount[0] + MISC_amount[0] + Personal_amount[0] + Saving_amount[0] + Transportation_amount[0] + Utilities_amount[0] + Food_amount[0] + Donation_amount[0];
+    # print("Splitting receipt name into a list of 4 words(3 splits).");
+    fields = receipt.split(" ",3); # Splitting receipt name into a list of 4 words(3 splits).
+    
+    # print("Filtering the files by whether they have 4 words in the name list.");
+    if len(fields) == 4: # Filtering the files by whether they have 4 words in the name list.
 
-with open("report.txt", "w") as f:
-    if Income_amount[0] > 0:
-        print("Income", file=f)
-        for receipt in Income:
-            print("     ", receipt, file=f);
-        print("    Income:",Income_amount[0], file=f);
-    if Bill_amount[0] > 0:
-        print("Bills", file=f)
-        for receipt in Bills:
-            print("     ", receipt, file=f);
-        print("    Bills Cost:",Bill_amount[0], file=f)
-    if Debt_amount[0] > 0:
-        print("Debts", file=f)
-        for receipt in Debts:
-            print("     ", receipt, file=f);
-        print("    Debts Cost:",Debt_amount[0], file=f);
-    if Housing_amount[0] > 0:
-        print("Housing", file=f)
-        for receipt in Housing:
-            print("     ", receipt, file=f);
-        print("    Housing Cost:",Housing_amount[0], file=f);
-    if Insurance_amount[0] > 0:
-        print("Insurance", file=f)
-        for receipt in Insurance:
-            print("     ", receipt, file=f);
-        print("    Insurance Cost:",Insurance_amount[0], file=f);
-    if Investment_amount[0] > 0:
-        print("Investment", file=f)
-        for receipt in Investment:
-            print("     ", receipt, file=f);
-        print("    Investment Cost:",Investment_amount[0], file=f);
-    if Medical_amount[0] > 0:
-        print("Medical", file=f)
-        for receipt in Medical:
-            print("     ", receipt, file=f);
-        print("    Medical Cost:",Medical_amount[0], file=f);
-    if MISC_amount[0] > 0:
-        print("MISC", file=f)
-        for receipt in MISC:
-            print("     ", receipt, file=f);
-        print("    MISC Cost:",MISC_amount[0], file=f);
-    if Personal_amount[0] > 0:
-        print("Personal", file=f)
-        for receipt in Personal:
-            print("     ", receipt, file=f);
-        print("    Personal Cost:",Personal_amount[0], file=f);
-    if Saving_amount[0] > 0:
-        print("Saving", file=f)
-        for receipt in Saving:
-            print("     ", receipt, file=f);
-        print("    Saving Cost:",Saving_amount[0], file=f);
-    if Transportation_amount[0] > 0:
-        print("Transportation", file=f)
-        for receipt in Transportation:
-            print("     ", receipt, file=f);
-        print("    Transportation Cost:",Transportation_amount[0], file=f);
-    if Utilities_amount[0] > 0:
-        print("Utilities", file=f)
-        for receipt in Utilities:
-            print("     ", receipt, file=f);
-        print("    Utilities Cost:",Utilities_amount[0], file=f);
-    if Food_amount[0] > 0:
-        print("Food", file=f)
-        for receipt in Food:
-            print("     ", receipt, file=f);
-        print("    Food Cost:",Food_amount[0], file=f);
-    if Donation_amount[0] > 0:
-        print("Donations", file=f)
-        for receipt in Donation:
-            print("     ", receipt, file=f);
-        print("    Food Cost:",Donation_amount[0], file=f);
+        # print("Checking the dictionary for", fields[3].split('-',1)[0]);
+        Category = config.get(fields[3].split('-',1)[0]); # Checking the dictionary for the Category.
+        # print(Category);
 
-    print('You earned $',Income_amount[0],'this month.', file=f);
-    print('You spent $',Total,'this month.', file=f);
+        # print("Filtering the incoming receipt category by datatype.");
+        if type(Category).__name__ != 'NoneType': # Filtering the incoming receipt category by datatype.
+
+            # print("Appending the receipt name to the end of the list defined by the variable Category[0].");
+            Category[0].append(receipt); # Appending the receipt name to the end of the list defined by the variable Category[0].
+            # print(Category);
+            # print(Category[0]);
+
+            # print("Adding the receipt total to the Category total defined by the variable Category[1][0].");
+            Category[1][0] = Category[1][0] + float(fields[1].strip("+$")); # Adding the receipt total to the Category total defined by the variable Category[1][0].
+            # print(Category[1][0]);
+            
+            if fields[1].strip(".$1234567890abcdefghijklmnopqrstuvwxyz[]") == "+":
+                totalEarned = totalEarned + float(fields[1].strip("+$"));
+            else:
+                totalspent = totalspent + float(fields[1].strip("+$"));  
+
+# print("Opening report.txt.");
+with open("report.txt", "w") as f: # Opening report.txt.
+    
+#     print("Iterating over the dictionary's key entries.");
+    for category in [*config]: # Iterating over the dictionary's key entries.
+
+#         print("Check if the dictionary category has any amount spent / earned.");
+#         print(category);
+#         print(config.get(category)[1][0]); # Check if the dictionary category has any amount spent / earned.
+        
+        if config.get(category)[1][0] > 0:
+#            print("Writing in report.txt.");
+
+#            print("Writing all of the receipt names in order.");
+            print(config.get(category)[0][0], file=f);
+            iteration = 0;
+            for receipt in config.get(category)[0]:
+                if iteration > 0:
+                    print("     ", receipt, file=f);
+                iteration = iteration + 1;                
+            print("  ",config.get(category)[0][0],"total: $",config.get(category)[1][0], file=f);
+    print("Total earned:",totalEarned ,file=f);
+    print("Total spent:",totalspent ,file=f);
