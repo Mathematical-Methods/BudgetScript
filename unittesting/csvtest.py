@@ -6,6 +6,8 @@ pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 import cv2
 import numpy as np
 
+options= '--psm 6'
+
 receipt_database = "/home/unknown/Documents/00.Repositories/BudgetScript/receipt_database/"
 unlisted_database = "/home/unknown/Documents/00.Repositories/BudgetScript/unlisted_database/"
 receipts = os.listdir(receipt_database)
@@ -61,41 +63,41 @@ def unlisted_filter(file,receipt_category,dict):
     if receipt_category in dict:
         return receipt_category
     else:
-        print(f"os.rename({receipt_database+file}, {unlisted_database+file})")
-        #os.rename(receipt_database+'/'+file, unlisted_database+'/'+file)
+        #print(f"os.rename({receipt_database+file}, {unlisted_database+file})")
+        os.rename(receipt_database+'/'+file, unlisted_database+'/'+file)
 
 # define OCR function-> input: individual file name; output: text in the file.
 def OCR(file):
-    ind = ""
+    file.lower()
     if ".pdf" in file:
         receipt_pages = convert_from_path(receipt_database+file);
-        ind = ".pdf"
         receipt_text_pages = ""
         for page in receipt_pages:
             page = erosion_dilation(page)
-            receipt_text_page=pytesseract.image_to_string(page).replace('\n', ' ')
+            receipt_text_page=pytesseract.image_to_string(page, config=options).replace('\n', ' ')
             receipt_text_pages+=receipt_text_page
         page.save('output_image.jpg')
         return receipt_text_pages
     else:
         image = receipt_database+'/'+file
         image = erosion_dilation(image)
-        receipt_text=pytesseract.image_to_string(image).replace('\n', ' ')
+        receipt_text=pytesseract.image_to_string(image, config=options).replace('\n', ' ')
         image.save('output_image.jpg')
         return receipt_text 
     #### Currently here. Writing the filter that will handle .pdf files.
     #### the pytesseract will be called after this filter is set up.   
 
 i=0
-
+i_csv=0
 csv_file = open("train.csv","r+")
+csv_file.write(", receipt text, receipt category\n")
+
 for receipt in receipts:
     receipt_category = category_function(receipt)
     receipt_category = unlisted_filter(receipt,receipt_category,config)
     
     if type(receipt_category).__name__ != 'NoneType':
+        print("Handling "+receipt)
         text = OCR(receipt)
-        csv_file.write(str(i)+','+receipt_category+','+text+'\n')
-        i+=1
-    if i == 6: 
-        break
+        csv_file.write(str(i_csv)+','+receipt_category+','+text+'\n')
+        i_csv+=1
