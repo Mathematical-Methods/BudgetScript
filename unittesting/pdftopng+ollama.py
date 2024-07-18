@@ -10,7 +10,7 @@ im = convert_from_path(pdf_file);
 for page in im:
     receipt_text=pytesseract.image_to_string(page)
     print(receipt_text)
-    #Return the receipt timestamp in MM-DD-YYYY:
+    
     
 
 

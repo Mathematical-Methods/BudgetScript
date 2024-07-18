@@ -85,6 +85,8 @@ def OCR(file):
         print(receipt_text)
         image.save('output_image.jpg')
         return receipt_text 
+    #### Currently here. Writing the filter that will handle .pdf files.
+    #### the pytesseract will be called after this filter is set up.   
 
 i=0
 for receipt in receipts:
@@ -97,11 +99,3 @@ for receipt in receipts:
     i+=1
     if i == 4: 
         break
-
-
-    
-# define main function-> input: category and text; output: added row to csv file with category and text in respective columns.
-
-# get a list of files in specified folder.
-
-# for each file in list of files.

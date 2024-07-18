@@ -1,2 +1,5 @@
 ./.venv/
-./receipt_database
+./receipt_database/
+./output_image.jpg
+./train.csv
+./unlisted_database/
