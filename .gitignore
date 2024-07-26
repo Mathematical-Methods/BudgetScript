@@ -3,3 +3,4 @@
 ./output_image.jpg
 ./train.csv
 ./unlisted_database/
+./tesseractoutput/
