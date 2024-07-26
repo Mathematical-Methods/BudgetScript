@@ -6,6 +6,7 @@ pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 import cv2
 import numpy as np
 
+
 tesseract_config = "--oem 3 --dpi 300 --psm 3 -l eng+osd"
 receipt_database = "/home/unknown/Documents/00.Repositories/BudgetScript/receipt_database/"
 unlisted_database = "/home/unknown/Documents/00.Repositories/BudgetScript/unlisted_database/"
@@ -51,7 +52,10 @@ def preprocess(image):
     return image
 
 # Deskewing
-    ## https://github.com/kakul/Alyn
+    
+
+
+
 # Scanning border removal
     ## https://stackoverflow.com/questions/57858944/opencv-python-border-removal-preprocessing-for-ocr
 # see the below libraries:
