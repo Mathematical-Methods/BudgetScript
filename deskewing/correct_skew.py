@@ -26,6 +26,7 @@ thresh = cv2.threshold(gray, 0, 255,
 # compute a rotated bounding box that contains all
 # coordinates
 coords = np.column_stack(np.where(thresh > 0))
+print(coords)
 angle = cv2.minAreaRect(coords)[-1]
 # the `cv2.minAreaRect` function returns values in the
 # range [-90, 0); as the rectangle rotates clockwise the
